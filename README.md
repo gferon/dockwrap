@@ -8,6 +8,8 @@ Furthermore, Docker randomly assigns IP addresses in the range provided by the b
 ## Installation
 Clone the repo or download the file directly with: `wget https://github.com/gferon/dockwrap/blob/master/dockwrap.sh`
 
+You can install the script in `/usr/local/bin/dockwrap` by running `./dockwrap install`.
+
 ## Usage
 Usage: dockwrap [--remote] [OPTIONS]
 
