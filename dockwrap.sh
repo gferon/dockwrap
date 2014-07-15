@@ -100,8 +100,9 @@ function start_container() {
     DOCKER_OPTS="run -d -t -i --name $CONTAINER_NAME $ADDITIONAL_OPTS $VOLUME_OPTS $TAG:$VERSION $2"
   fi
 
-  d ${DOCKER_OPTS}
+  CID=$(d ${DOCKER_OPTS})
   [ $? -ne 0 ] && return;
+
   IP=$(container_ip_addr)
   if [ -n "$ZONE" ]  && [ -n "$SUBDOMAIN" ]; then
       dns_update "add" "5" "$IP"
@@ -120,15 +121,18 @@ function start_container() {
   fi
   if [[ $1 == "debug" ]]; then
     DOCKER_OPTS="attach $CID"
-    docker ${DOCKER_OPTS}
+    d ${DOCKER_OPTS}
   fi
 }
 
 function stop_container() {
   include_env
-  d stop ${CONTAINER_NAME}
-  if [ -n "$ZONE" ]  && [ -n "$SUBDOMAIN" ]; then
-    dns_update "delete"
+  STATE=$(container_state)
+  if [[ $STATE == "true" ]]; then
+    d stop ${CONTAINER_NAME}
+    if [ -n "$ZONE" ]  && [ -n "$SUBDOMAIN" ]; then
+      dns_update "delete"
+    fi
   fi
 }
 
