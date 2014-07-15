@@ -58,16 +58,16 @@ function d() {
 
 # Check if a container is running or has been stopped
 function container_state() {
-  d inspect --format '{{ .State.Running }}' $CONTAINER_NAME
+  d inspect --format '{{ .State.Running }}' $CONTAINER_NAME 2>/dev/null
 }
 
 # Get a container's IP address
 function container_ip_addr() {
-  d inspect --format '{{ .NetworkSettings.IPAddress }}' $CONTAINER_NAME
+  d inspect --format '{{ .NetworkSettings.IPAddress }}' $CONTAINER_NAME 2>/dev/null
 }
 
 function container_volumes() {
-  d inspect --format '{{ .Volumes }}' $CONTAINER_NAME
+  d inspect --format '{{ .Volumes }}' $CONTAINER_NAME 2>/dev/null
 }
 
 ##
