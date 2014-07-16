@@ -209,11 +209,11 @@ cat > $PWD/dockwrap-env.sh << EOL
 APP="my_app"
 SERVICE="my_service"
 
-TAG="${APP}/${SERVICE}"
+TAG="\$APP/\$SERVICE"
 VERSION="latest"
 
 # The container name to use
-CONTAINER_NAME="${APP}-{SERVICE}"
+CONTAINER_NAME="\$APP-\$SERVICE"
 
 ## Uncomment if you want to enable dynamic DNS updates
 # The hostname or IP addres of the DNS server you want to send updates to
