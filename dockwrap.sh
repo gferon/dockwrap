@@ -119,6 +119,7 @@ function start_container() {
       fi
   else
       echo -e "The new container got \e[1m$IP\e[0m"
+      echo
   fi
   if [[ $1 == "debug" ]]; then
     DOCKER_OPTS="attach $CID"
