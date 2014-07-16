@@ -141,11 +141,11 @@ function stop_container() {
 function commit_container() {
   include_env
 	d commit -a ${USER} ${CONTAINER_NAME} ${TAG}
-	remove_container
 }
 
 function remove_container() {
   include_env
+  ask_confirmation "remove container $CONTAINER_NAME (with all of its data)?"
   d rm ${CONTAINER_NAME} > /dev/null 2>&1
 }
 
