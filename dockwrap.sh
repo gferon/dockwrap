@@ -105,6 +105,7 @@ function start_container() {
 
   IP=$(container_ip_addr)
   if [ -n "$ZONE" ]  && [ -n "$SUBDOMAIN" ]; then
+      dns_update "delete"
       dns_update "add" "5" "$IP"
       if [ $? -ne 0 ]; then
         echo "Dynamic DNS update failed for $IP."
