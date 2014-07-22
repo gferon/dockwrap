@@ -206,8 +206,8 @@ cat > $PWD/dockwrap-env.sh << EOL
 ## Configuration variables
 
 # This is the Docker tag to use
-APP="my_app"
-SERVICE="my_service"
+APP="$(basename $(dirname $PWD))"
+SERVICE="$(basename $PWD)"
 
 TAG="\$APP/\$SERVICE"
 VERSION="latest"
@@ -320,7 +320,7 @@ for var in "$@"
               ;;
     install)  install_script
               ;;
-    *)	      show_help
+    *)	      d $@
               ;;
     *\ * )    continue;
   esac
