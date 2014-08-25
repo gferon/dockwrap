@@ -146,7 +146,7 @@ function commit_container() {
 function remove_container() {
   include_env
   ask_confirmation "remove container $CONTAINER_NAME (with all of its data)?"
-  d rm ${CONTAINER_NAME} > /dev/null 2>&1
+  d rm $1 ${CONTAINER_NAME} > /dev/null 2>&1
 }
 
 function container_info() {
@@ -306,8 +306,7 @@ for var in "$@"
               echo "Respawning a new container"
               start_container
               ;;
-    destroy)  stop_container
-              remove_container
+    destroy)  remove_container "-f"
               ;;
     info)     container_info
               ;;
