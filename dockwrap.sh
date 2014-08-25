@@ -171,6 +171,27 @@ function container_info() {
   fi
 }
 
+function enter_container() {
+  include_env
+  STATE=$(container_state)
+  if [[ $STATE == "true" ]]; then
+    NSENTER=$(which nsenter)
+    if [ -z "$NSENTER" ]; then
+      echo "You need to install a newer version of util-linux or compile it yourself and add nsenter to your PATH to use this feature."
+      exit
+    fi
+    PID=$(docker inspect --format {{.State.Pid}} $CONTAINER_NAME)
+    if [ -z "$1" ]; then
+      ARGS="/bin/bash"
+    else
+      ARGS=$1
+    fi
+    sudo nsenter --target $PID --mount --uts --ipc --net --pid $ARGS
+  else
+    echo "The container is not running."
+  fi
+}
+
 function browse() {
   include_env
 
@@ -298,6 +319,9 @@ for var in "$@"
               ;;
     debug)    start_container $1 $2
               stop_container
+              shift
+              ;;
+    enter)    enter_container $2
               shift
               ;;
     commit)   echo "Stopping the running container"
