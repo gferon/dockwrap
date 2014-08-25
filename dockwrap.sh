@@ -319,8 +319,6 @@ for var in "$@"
               ;;
     install)  install_script
               ;;
-    *)	      d $@
-              ;;
     *\ * )    continue;
   esac
   shift
