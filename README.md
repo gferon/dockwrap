@@ -3,7 +3,7 @@ Dockwrap is a small utility written in Bash designed to help you test/run your a
 
 By default, Docker spawns a new container from an image when you use `docker run`, and you usually have to repeat a lot of commands and know complex arguments if you want to build, run and stop your app while testing it.
 
-Furthermore, Docker randomly assigns IP addresses in the range provided by the bridged interface specified by the `--bridge` parameter, or the CIDR range provided by `--bip`. This means you'll get a new IP each time you start a new container. This tool is able to perform dynamic DNS updates to assign one or multiple sub-domain in a zone to the IP address allocated by Docker. This is very useful for testing purposes. The feature has been tested with the default configuration of Bind9 on Ubuntu. You need the `nsupdate` tool which is provided by the package `nsupdate` on Debian/Ubuntu.
+Furthermore, Docker randomly assigns IP addresses in the range provided by the bridged interface specified by the `--bridge` parameter, or the CIDR range provided by `--bip`. This means you'll get a new IP each time you start a new container. This tool is able to perform dynamic DNS updates to assign one or multiple sub-domain in a zone to the IP address allocated by Docker. This is very useful for testing purposes. The feature has been tested with the default configuration of Bind9 on Ubuntu. You need the `nsupdate` tool which is provided by the package `dnsutils` on Debian/Ubuntu.
 
 ## Installation
 Clone the repo or download the file directly with: `wget https://github.com/gferon/dockwrap/blob/master/dockwrap.sh`
@@ -18,8 +18,9 @@ You can chain multiple options, like `dockwrap build destroy run`
 All the commands can be executed on a remote docker daemon, when running with `--remote` and using
 the environment variable DOCKWRAP_REMOTE_DAEMON. The remote [docker daemon needs to listen on a TCP socket](https://docs.docker.com/articles/basics/#bind-docker-to-another-hostport-or-a-unix-socket) for this feature to work.
 
+To use dockwrap, you need to run `dockwrap init` in the directory containing your Dockerfile. This will create a sample `dockwrap-env.sh` file which contains all the host-specific settings which are detailed later on this page.
+
 ### Environment variables
-First, you need to run `dockwrap init` in the directory containing your Dockerfile. This will create a sample `dockwrap-env.sh` file which contains all the host-specific settings which are detailed later on this page.
 * `TAG` - the tag to use when building the image
 * `VERSION` - the version to use along with the tag (Docker defaults to 'latest')
 * `CONTAINER_NAME` - the name to assign when spawning a new container from the image, this is used by Dockwrap to enforce a "lifecycle" on your containerized app, you won't be able to spawn multiple instances of your app
