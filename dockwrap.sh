@@ -140,7 +140,7 @@ function stop_container() {
 
 function commit_container() {
   include_env
-	d commit -a ${USER} ${CONTAINER_NAME} ${TAG}
+	d commit -a ${USER} ${CONTAINER_NAME} ${TAG}:${VERSION}
 }
 
 function remove_container() {
@@ -327,8 +327,6 @@ for var in "$@"
     commit)   echo "Stopping the running container"
               stop_container
               commit_container
-              echo "Respawning a new container"
-              start_container
               ;;
     destroy)  remove_container "-f"
               ;;
