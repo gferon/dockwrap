@@ -171,22 +171,16 @@ function container_info() {
   fi
 }
 
-function enter_container() {
+function exec_in_container() {
   include_env
   STATE=$(container_state)
   if [[ $STATE == "true" ]]; then
-    NSENTER=$(which nsenter)
-    if [ -z "$NSENTER" ]; then
-      echo "You need to install a newer version of util-linux or compile it yourself and add nsenter to your PATH to use this feature."
-      exit
-    fi
-    PID=$(docker inspect --format {{.State.Pid}} $CONTAINER_NAME)
     if [ -z "$1" ]; then
       ARGS="/bin/bash"
     else
       ARGS=$1
     fi
-    sudo nsenter --target $PID --mount --uts --ipc --net --pid $ARGS
+    d exec -i -t ${CONTAINER_NAME} $ARGS
   else
     echo "The container is not running."
   fi
@@ -285,6 +279,7 @@ CORE FUNCTIONS:
   start		Spawn a new container in detached mode, if a container named ${CONTAINER_NAME} already exists, start it.
   stop		Stop the running container
   debug		Spawn a new container with a TTY
+  exec      Exec the specified command inside a running container, defaults to /bin/bash
   commit	Commit the named container and tag it as the latest version of the image
   destroy	Stop then remove the running container
   info		Get the status of the running container, its IP address, and the DNS domain you can use
@@ -313,15 +308,17 @@ for var in "$@"
   case "$1" in
     build)     build_image
               ;;
-    run|start)    start_container
+    run|start) start_container
               ;;
     stop)     stop_container
               ;;
-    debug)    start_container $1 $2
+    debug)    start_container $1
               stop_container
               shift
               ;;
-    enter)    enter_container $2
+    shell)    exec_in_container
+              ;;
+    exec)     exec_in_container $1
               shift
               ;;
     commit)   echo "Stopping the running container"

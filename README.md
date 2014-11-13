@@ -39,7 +39,7 @@ Don't forget to exclude the `dockwrap-env.sh` file from your git repo is you are
 * `start` - Spawn a new container in detached mode with a pseudo-tty. If a container named `CONTAINER_NAME` already exists, start it. If the container permits it (uses CMD and not ENTRYPOINT) you can specify a different command like `dockwrap run /bin/bash`.
 * `stop` - Stop the running container
 * `debug` - Same as `start` except we `docker attach` after starting the container
-* `enter` - Use nsenter from util-linux to spawn a new instance of the specified program (defaults to /bin/bash)
+* `exec` - Use docker exec to spawn a new instance of the specified program (defaults to /bin/bash)
 * `commit` - Commit the named container and tag it as the latest version of the image
 * `destroy` - Stop then remove the running container, this is a destructive operation
 * `info` - Get the status of the running container, its IP address, and the DNS domain you can use
