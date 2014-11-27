@@ -308,7 +308,8 @@ for var in "$@"
   case "$1" in
     build)     build_image
               ;;
-    run|start) start_container
+    run|start) start_container $1
+               shift
               ;;
     stop)     stop_container
               ;;
@@ -318,7 +319,8 @@ for var in "$@"
               ;;
     shell)    exec_in_container
               ;;
-    exec)     exec_in_container $1
+    exec)     shift
+              exec_in_container $1
               shift
               ;;
     commit)   echo "Stopping the running container"
@@ -338,7 +340,7 @@ for var in "$@"
               ;;
     install)  install_script
               ;;
-    *\ * )    continue;
+    *)    continue;
   esac
   shift
 done
