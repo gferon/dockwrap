@@ -1,11 +1,12 @@
 #!/bin/bash
+shopt -s extglob
 
 function include_env() {
     DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-    if [ ! -f ${PWD}/dockwrap-env.sh ]; then
+    if [ ! -f ${PWD}/dockwrap-env!(.sample) ]; then
         echo "You need to init the environment using 'dockwrap init' in your working directory in order to use this feature" && exit -1
     fi
-    source ${PWD}/dockwrap-env.sh
+    source ${PWD}/dockwrap-env!(.sample)
 }
 
 function ask_confirmation() {
