@@ -218,6 +218,8 @@ if [ -f ${PWD}/dockwrap-env.sh ]; then
 fi
 
 cat > $PWD/dockwrap-env.sh << EOL
+#!/bin/bash
+
 ## Configuration variables
 
 # This is the Docker tag to use
@@ -251,11 +253,16 @@ CONTAINER_NAME="\$APP-\$SERVICE"
 # BROWSE_BASE_URL="http://\$ZONE.\$SUBDOMAIN"
 # BROWSE_PATH="/my_path"
 
+if [[ "$(basename -- "$0")" == "dockwrap-env.sh" ]]; then
+    echo "Don't run $0, use Dockwrap!" >&2
+    exit 1
+fi
+
 EOL
 }
 
 function install_script() {
-    cp "$0" "/usr/local/bin/dockwrap" && sudo chmod +x /usr/local/bin/dockwrap
+    cp "$0" "/usr/local/bin/dockwrap"
     [ $? -ne 0 ] && echo "Failed to install the dockwrap script in the PATH" && return
     echo "You can now use Dockwrap everywhere!"
 }
