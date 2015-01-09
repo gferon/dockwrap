@@ -262,7 +262,7 @@ EOL
 }
 
 function install_script() {
-    cp "$0" "/usr/local/bin/dockwrap"
+    ln "$0" "/usr/local/bin/dockwrap"
     [ $? -ne 0 ] && echo "Failed to install the dockwrap script in the PATH" && return
     echo "You can now use Dockwrap everywhere!"
 }
