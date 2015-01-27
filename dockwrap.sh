@@ -205,7 +205,7 @@ function browse() {
 
 function clean_stopped_containers() {
 	ask_confirmation "clean stopped containers? \e[1;31mYou might LOSE IMPORTANT DATA if you did not commit changes\e[0m"
-	d rm $(docker ps --no-trunc -a -q) > /dev/null 2>&1
+	d rm $(docker ps -aq --no-trunc -f "status=exited") > /dev/null 2>&1
 }
 
 function clean_untagged_images() {
