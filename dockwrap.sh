@@ -214,11 +214,11 @@ function clean_untagged_images() {
 }
 
 function init_env() {
-if [ -f ${PWD}/dockwrap-env.sh ]; then
-  echo "dockwrap-env.sh already exists." && return;
+if [ -f ${PWD}/dockwrap-env!(.sample) ]; then
+  echo "dockwrap-env already exists." && return;
 fi
 
-cat > $PWD/dockwrap-env.sh << EOL
+cat > $PWD/dockwrap-env << EOL
 #!/bin/bash
 
 ## Configuration variables
@@ -254,7 +254,7 @@ CONTAINER_NAME="\$APP-\$SERVICE"
 # BROWSE_BASE_URL="http://\$ZONE.\$SUBDOMAIN"
 # BROWSE_PATH="/my_path"
 
-if [[ "$(basename -- "$0")" == "dockwrap-env.sh" ]]; then
+if [[ "$(basename -- "$0")" == "dockwrap-env" ]]; then
     echo "Don't run $0, use Dockwrap!" >&2
     exit 1
 fi
@@ -263,7 +263,8 @@ EOL
 }
 
 function install_script() {
-    ln -s "$(cd $(dirname "$0") && pwd -P)/$(basename "$0")" "/usr/local/bin/dockwrap"
+    DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+    ln -s "$DIR/$0" "/usr/local/bin/dockwrap"
     [ $? -ne 0 ] && echo "Failed to install the dockwrap script in the PATH" && return
     echo "You can now use Dockwrap everywhere!"
 }
