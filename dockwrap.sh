@@ -210,7 +210,7 @@ function clean_stopped_containers() {
 
 function clean_untagged_images() {
   ask_confirmation "clean untagged images (like intermediate images from aborted builds)?"
-  d rmi $(docker images -a | grep "^<none>" | awk '{print $3}') > /dev/null 2>&1
+  d rmi $(docker images -f "dangling=true" -q) > /dev/null 2>&1
 }
 
 function init_env() {
