@@ -147,7 +147,13 @@ function commit_container() {
 function remove_container() {
   include_env
   ask_confirmation "remove container $CONTAINER_NAME (with all of its data)?"
-  d rm $1 ${CONTAINER_NAME} > /dev/null 2>&1
+  d rm $1 ${CONTAINER_NAME}
+}
+
+function remove_image() {
+  include_env
+  ask_confirmation "remove image $TAG?"
+  d rmi ${TAG}
 }
 
 function container_info() {
@@ -344,6 +350,8 @@ for var in "$@"
               ;;
     tidy)     clean_stopped_containers
               clean_untagged_images
+              ;;
+    remove)   remove_image
               ;;
     init)     init_env
               ;;
