@@ -128,6 +128,16 @@ function start_container() {
   fi
 }
 
+function logtail_container() {
+  include_env
+  STATE=$(container_state)
+  if [[ $STATE == "true" ]]; then
+    d logs -f -t $CONTAINER_NAME
+  elif [[ $STATE == "false" ]]; then
+    echo "Container $CONTAINER_NAME is not running."
+  fi
+}
+
 function stop_container() {
   include_env
   STATE=$(container_state)
@@ -271,12 +281,14 @@ OPTIONS:
 CORE FUNCTIONS:
 
   build		Build the image using the Dockerfile in the current directory and tags it
-  start		Spawn a new container in detached mode, if a container named ${CONTAINER_NAME} already exists, start it.
+  run		Spawn a new container in detached mode, if a container already exists, start it
+  logs		Follow the output of the container's entrypoint process
   stop		Stop the running container
-  debug		Spawn a new container with a TTY
-  exec      Exec the specified command inside a running container, defaults to /bin/bash
+  attach	Spawn a new container with a TTY
+  exec		Exec the specified command inside a running container, defaults to /bin/bash
   commit	Commit the named container and tag it as the latest version of the image
-  destroy	Stop then remove the running container
+  rm		Stop the container then remove it
+  rmi		Remove the image
   info		Get the status of the running container, its IP address, and the DNS domain you can use
 
 HELPER FUNCTIONS:
@@ -300,41 +312,45 @@ fi
 for var in "$@"
   do
   case "$1" in
-    build)     build_image
-              ;;
-    run|start) start_container $1
-               shift
-              ;;
-    stop)     stop_container
-              ;;
-    debug)    start_container $1
-              stop_container
-              shift
-              ;;
-    shell)    exec_in_container
-              ;;
-    exec)     shift
-              exec_in_container $1
-              shift
-              ;;
-    commit)   echo "Stopping the running container"
-              stop_container
-              commit_container
-              ;;
-    destroy)  remove_container "-f"
-              ;;
-    info)     container_info
-              ;;
-    tidy)     clean_stopped_containers
-              clean_untagged_images
-              ;;
-    remove)   remove_image
-              ;;
-    init)     init_env
-              ;;
-    install)  install_script
-              ;;
-    *)    continue;
+    # Dockwrap specific options
+    init)          init_env
+                   ;;
+    install)       install_script
+                   ;;
+
+    # Docker wrapper options
+    build)         build_image
+                   ;;
+    run|start)     start_container $1
+                   shift
+                   ;;
+    stop)          stop_container
+                   ;;
+    attach|debug)  start_container $1
+                   stop_container
+                   shift
+                   ;;
+    shell)         exec_in_container
+                   ;;
+    exec)          shift
+                   exec_in_container $1
+                   shift
+                   ;;
+    commit)        echo "Stopping the running container"
+                   stop_container
+                   commit_container
+                   ;;
+    rm|destroy)    remove_container "-f"
+                   ;;
+    info)          container_info
+                   ;;
+    tidy|cleanup)  clean_stopped_containers
+                   clean_untagged_images
+                   ;;
+    rmi|remove)    remove_image
+                   ;;
+    *)             show_help && exit 1
+                   ;;
   esac
   shift
 done
