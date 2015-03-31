@@ -81,7 +81,7 @@ function build_image() {
 }
 
 ##
-# This is a wrapper to enforce a lifecycle for you Dockerized app
+# This is a wrapper to enforce a lifecycle for your Dockerized app
 # 1. If a container is not running, spawn a new one based on the image your built
 # 2. If the container is running, do nothing
 # 3. If the container was stopped, start it again
