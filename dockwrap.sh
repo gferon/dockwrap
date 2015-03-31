@@ -193,22 +193,6 @@ function exec_in_container() {
   fi
 }
 
-function browse() {
-  include_env
-
-  # Check if a container has been stopped
-  STATE=$(container_state)
-  if [[ $STATE == "true" ]]; then
-    if [ -n "$BROWSE_BASE_URL" ] && [ -n "$BROWSE_PATH" ]; then
-      sensible-browser "$BROWSE_BASE_URL$BROWSE_PATH"
-    else
-      echo "You did not define \$BROWSE_BASE_URL or \$BROWSE_PATH in your dockwrap env. variables!"
-    fi
-  else
-    echo "The container is not running."
-  fi
-}
-
 function clean_stopped_containers() {
 	ask_confirmation "clean stopped containers? \e[1;31mYou might LOSE IMPORTANT DATA if you did not commit changes\e[0m"
 	d rm $(docker ps -aq --no-trunc -f "status=exited") > /dev/null 2>&1
@@ -256,10 +240,6 @@ CONTAINER_NAME="\$APP-\$SERVICE"
 # ADDITIONAL_OPTS="--link db:db"
 # ADDITIONAL_OPTS="--env MY_ENV_VAR=/path/"
 
-# Custom path when using the dockwrap browse function
-# BROWSE_BASE_URL="http://\$ZONE.\$SUBDOMAIN"
-# BROWSE_PATH="/my_path"
-
 if [[ "$(basename -- "$0")" == "dockwrap-env" ]]; then
     echo "Don't run $0, use Dockwrap!" >&2
     exit 1
@@ -302,7 +282,6 @@ CORE FUNCTIONS:
 HELPER FUNCTIONS:
 
   tidy		Delete stopped containers images and untagged images to regain volume space
-  browse    Open the default browser
 
 EOF
 exit 1
@@ -345,8 +324,6 @@ for var in "$@"
     destroy)  remove_container "-f"
               ;;
     info)     container_info
-              ;;
-    browse)   browse
               ;;
     tidy)     clean_stopped_containers
               clean_untagged_images
