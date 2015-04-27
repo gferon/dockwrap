@@ -157,7 +157,7 @@ function commit_container() {
 function remove_container() {
   include_env
   ask_confirmation "remove container $CONTAINER_NAME (with all of its data)?"
-  d rm $1 ${CONTAINER_NAME}
+  d rm -v $1 ${CONTAINER_NAME}
 }
 
 function remove_image() {
