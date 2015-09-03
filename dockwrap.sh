@@ -157,7 +157,7 @@ function commit_container() {
 function remove_container() {
   include_env
   ask_confirmation "remove container $CONTAINER_NAME (with all of its data)?"
-  d rm $1 ${CONTAINER_NAME}
+  d rm -v $1 ${CONTAINER_NAME}
 }
 
 function remove_image() {
@@ -210,7 +210,7 @@ function clean_stopped_containers() {
 
 function clean_untagged_images() {
   ask_confirmation "clean untagged images (like intermediate images from aborted builds)?"
-  d rmi $(docker images -a | grep "^<none>" | awk '{print $3}') > /dev/null 2>&1
+  d rmi $(docker images -f "dangling=true" -q) > /dev/null 2>&1
 }
 
 function init_env() {
