@@ -224,8 +224,8 @@ cat > $PWD/dockwrap-env << EOL
 ## Configuration variables
 
 # This is the Docker tag to use
-APP="$(basename $(dirname $PWD))"
-SERVICE="$(basename $PWD)"
+APP="$(echo $(basename $(dirname $PWD)) | tr '[A-Z]' '[a-z]')"
+SERVICE="$(echo $(basename $PWD) |  tr '[A-Z]' '[a-z]')"
 
 TAG="\$APP/\$SERVICE"
 VERSION="latest"
